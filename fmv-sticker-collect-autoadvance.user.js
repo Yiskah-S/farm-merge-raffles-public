@@ -41,7 +41,7 @@
 
     // Input fallback: simulate clicks at known button locations.
     // This is used when patching doesn't work or the runtime is isolated.
-    inputFallbackEnabled: false,
+    inputFallbackEnabled: true,
     inputRequireUserGestureMs: 12000,
     inputMinIntervalMs: 1200,
     inputPostCollectDeclineDelayMs: 3027,
@@ -53,7 +53,7 @@
     },
 
     // Capture logger: record click positions to refine targets.
-    captureEnabled: false,
+    captureEnabled: true,
     capturePattern: ["collect", "not-now", "skip"],
     captureMinIntervalMs: 120,
     captureMaxEntries: 5000,
@@ -84,6 +84,8 @@
     patchedCollect: false,
     patchedSkip: false,
     patchedRaffle: false,
+    cycleRunning: false,
+    cycleArmed: false,
     scanTimer: null,
     intervalId: null,
     runtimeTimer: null,
@@ -109,7 +111,6 @@
   };
 
   function findCanvasDeep() {
-    // Devvit often nests the canvas in shadow roots; crawl to avoid brittle selectors.
     const seen = new Set();
     const walk = (root) => {
       if (!root || seen.has(root)) return null;
@@ -328,7 +329,6 @@
     if (window.__fmvInputFallbackInstalled) return;
     window.__fmvInputFallbackInstalled = true;
 
-    // Require a recent user gesture before any automated clicks.
     window.addEventListener("pointerdown", () => {
       STATE.lastUserPointerAt = Date.now();
       updateLastCanvasRect();
