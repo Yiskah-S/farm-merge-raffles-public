@@ -81,7 +81,7 @@
   const CURRENT_USER_NAME = "";
   const SHEETS_WEBHOOK_URL = "";
   const SHEETS_WEBHOOK_SECRET = "";
-  const SHEETS_EXCLUDED_WINNER_NAMES = [CURRENT_USER_NAME].filter(Boolean);
+  const USER_EXCLUDED_WINNER_NAMES = [CURRENT_USER_NAME].filter(Boolean);
 
   /***************************************************************************
    * policy.js
@@ -116,7 +116,7 @@
   const DEFAULT_EXCLUDED_WINNER_NAMES = ["alexeye", "Independent_Sand_295"];
   const SHEETS_EXCLUDED_WINNER_NAMES = [
     ...DEFAULT_EXCLUDED_WINNER_NAMES,
-    CURRENT_USER_NAME,
+    ...USER_EXCLUDED_WINNER_NAMES,
   ].filter(Boolean);
 
   /***************************************************************************
@@ -5029,8 +5029,6 @@
     for (const dayKey of dayKeys) {
       output[`${RAFFLE_BUCKET_PREFIX}${dayKey}`] = raffleStore.getBucketSnapshot(dayKey);
     }
-    output[REVERIFY_INDEX_KEY] = loadJsonKey(REVERIFY_INDEX_KEY) || {};
-    output[REVERIFY_DAYS_KEY] = loadJsonKey(REVERIFY_DAYS_KEY) || {};
     const debugDays = Object.keys(loadDebugLogDays());
     for (const dayKey of debugDays) {
       output[`${DEBUG_LOG_BUCKET_PREFIX}${dayKey}`] = loadDebugLogBucket(dayKey);
